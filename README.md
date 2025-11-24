@@ -33,7 +33,6 @@ src/main/java/com/profitsoft/application/
 │   └── StatisticsService.java # Multithreaded file processing service
 ├── utils/
 │   ├── BookJsonParser.java         # JSON parser (streaming API)
-│   ├── StatisticsCalculator.java   # Statistics calculator
 │   ├── XmlStatisticsWriter.java    # XML generator
 │   ├── ResultPrinter.java          # Output formatter
 │   └── TestDataGenerator.java      # Test data generator
@@ -50,6 +49,7 @@ src/main/java/com/profitsoft/application/
 - XML output generation
 - Comma-separated genre processing
 - Results sorted by count (highest to lowest)
+- Backward compatibility: Supports both "author": "Name" (string) and "author": { ... } (object) formats.
 
 ## Input Data Examples
 
@@ -239,8 +239,9 @@ The performance test will:
 # All tests
 mvn test
 
-# Specific test
-mvn test -Dtest=StatisticsCalculatorTest
+# Specific tests
+mvn test -Dtest=StatisticsServiceTest          # Core integration tests
+mvn test -Dtest=BookJsonParserTest             # Streaming JSON parsing
 ```
 
 ## Dependencies

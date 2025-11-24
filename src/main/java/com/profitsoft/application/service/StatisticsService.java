@@ -60,7 +60,7 @@ public class StatisticsService {
         if (files.isEmpty()) {
             log.warn("No JSON files found in directory: {}", directory);
             File out = createOutputFile(attribute);
-            return new StatisticsResult(0, 0L, Collections.emptyList(), 0L, 0L, 0L, 0L, out); // 0L,
+            return new StatisticsResult(0, 0L, Collections.emptyList(), 0L, 0L, 0L, 0L, out);
         }
 
         ConcurrentHashMap<String, LongAdder> counts = new ConcurrentHashMap<>();
@@ -151,7 +151,7 @@ public class StatisticsService {
         }
 
         return new StatisticsResult(files.size(), bookCount.get(), statistics,
-                parsingTimeMs, xmlTimeMs, totalTime, errorCount.get(), out);  //, statsTimeMs
+                parsingTimeMs, xmlTimeMs, totalTime, errorCount.get(), out);
     }
 
     private File createOutputFile(String attribute) {
@@ -175,8 +175,10 @@ public class StatisticsService {
                 }
             };
             case "author" ->
-                    (book, counts, representatives) -> processValue(book.getAuthorName(), counts, representatives);
-            case "title" -> (book, counts, representatives) -> processValue(book.getTitle(), counts, representatives);
+                    (book, counts,
+                     representatives) -> processValue(book.getAuthorName(), counts, representatives);
+            case "title" -> (book, counts,
+                             representatives) -> processValue(book.getTitle(), counts, representatives);
             case "year_published" -> (book, counts, representatives) -> {
                 Integer y = book.getYearPublished();
                 if (y != null) {

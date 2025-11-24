@@ -29,20 +29,35 @@ public class Book {
     @JsonProperty("genre")
     private List<String> genres = new ArrayList<>();
 
-    /**
-     * Set author from either String or Author object for backward compatibility
-     */
     @JsonSetter("author")
     public void setAuthor(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("Author cannot be null");
         } else if (value instanceof String s) {
-            if (s.trim().isEmpty()) {
+            s = s.trim();
+            if (s.isEmpty()) {
                 throw new IllegalArgumentException("Author name cannot be empty");
             }
             this.author = new Author(s);
         } else if (value instanceof Author a) {
             this.author = a;
+        } else if (value instanceof Map<?, ?> map) {
+            // Handle Jackson passing Map for JSON object
+            Object nameObj = map.get("name");
+            String name = (nameObj != null) ? nameObj.toString().trim() : "";
+            if (name.isEmpty()) {
+                throw new IllegalArgumentException("Author 'name' is missing or empty in JSON object");
+            }
+            String country = map.get("country") instanceof String c ? c.trim() : null;
+            Integer birthYear = null;
+            Object byObj = map.get("birth_year");
+            if (byObj != null) {
+                try {
+                    birthYear = Integer.valueOf(byObj.toString().trim());
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            this.author = new Author(name, country, birthYear);
         } else {
             String str = value.toString().trim();
             if (str.isEmpty()) {
