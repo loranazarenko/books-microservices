@@ -12,6 +12,7 @@ import com.profitsoft.application.entities.Author;
 import com.profitsoft.application.entities.Book;
 import com.profitsoft.application.exceptions.ResourceNotFoundException;
 import com.profitsoft.application.mapper.BookMapper;
+import com.profitsoft.application.messaging.EmailNotificationService;
 import com.profitsoft.application.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.profitsoft.application.utils.BookJsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +46,12 @@ public class BookServiceTest {
 
     @Mock
     private ObjectMapper objectMapper;
+
+    @Mock
+    private EmailNotificationService emailNotificationService;
+
+    @Mock
+    private BookJsonParser bookJsonParser;
 
     @InjectMocks
     private BookService bookService;
@@ -120,9 +128,10 @@ public class BookServiceTest {
 
     @Test
     void testCreateBook_success() {
+
         when(authorService.findEntityById(1L)).thenReturn(testAuthor);
         when(bookRepo.save(any(Book.class))).thenReturn(testBook);
-
+        doNothing().when(emailNotificationService).notifyBookCreated(any(Book.class));
         BookDto result = bookService.create(testCreateDto);
 
         assertThat(result.getId()).isEqualTo(1L);
@@ -131,6 +140,7 @@ public class BookServiceTest {
         assertThat(result.getAuthor().getId()).isEqualTo(1L);
         verify(authorService, times(1)).findEntityById(1L);
         verify(bookRepo, times(1)).save(any(Book.class));
+        verify(emailNotificationService, times(1)).notifyBookCreated(any(Book.class));
     }
 
     @Test
@@ -216,6 +226,7 @@ public class BookServiceTest {
 
     @Test
     void testCreateBook_withoutGenres() {
+        doNothing().when(emailNotificationService).notifyBookCreated(any(Book.class));
         BookCreateDto dto = new BookCreateDto();
         dto.setTitle("Book without genres");
         dto.setAuthorId(1L);
@@ -241,6 +252,7 @@ public class BookServiceTest {
 
     @Test
     void testCreateBook_withMultipleGenres() {
+        doNothing().when(emailNotificationService).notifyBookCreated(any(Book.class));
         List<String> genres = List.of("Fiction", "Drama", "Mystery", "Adventure");
         BookCreateDto dto = new BookCreateDto();
         dto.setTitle("Multi-genre book");
