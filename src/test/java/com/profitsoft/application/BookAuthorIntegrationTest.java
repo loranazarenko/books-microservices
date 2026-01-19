@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.profitsoft.application.config.TestKafkaConfig;
 import com.profitsoft.application.dto.BookDto;
 import com.profitsoft.application.dto.AuthorDto;
 import com.profitsoft.application.repository.AuthorRepository;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +37,7 @@ import org.springframework.test.web.servlet.MvcResult;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
+@Import(TestKafkaConfig.class)
 @ActiveProfiles("test")
 @DisplayName("Book & Author APIs Integration Tests")
 public class BookAuthorIntegrationTest {
