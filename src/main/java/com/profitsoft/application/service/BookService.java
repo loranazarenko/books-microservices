@@ -5,6 +5,7 @@ import com.profitsoft.application.entities.Author;
 import com.profitsoft.application.entities.Book;
 import com.profitsoft.application.exceptions.ResourceNotFoundException;
 import com.profitsoft.application.mapper.BookMapper;
+import com.profitsoft.application.messaging.EmailNotificationService;
 import com.profitsoft.application.repository.BookRepository;
 import com.profitsoft.application.spec.BookSpecification;
 import com.profitsoft.application.utils.BookJsonParser;
@@ -16,10 +17,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +37,25 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Transactional
 public class BookService {
-
+    private final EmailNotificationService emailNotificationService;
     private final AuthorService authorService;
     private final BookRepository bookRepository;
     private final BookJsonParser bookJsonParser;
     private final BookMapper bookMapper;
+
+    @Autowired
+    public BookService(
+            BookRepository bookRepository,
+            AuthorService authorService,
+            BookJsonParser bookJsonParser,
+            BookMapper bookMapper,
+            EmailNotificationService emailNotificationService) {
+        this.bookRepository = bookRepository;
+        this.authorService = authorService;
+        this.bookJsonParser = bookJsonParser;
+        this.bookMapper = bookMapper;
+        this.emailNotificationService = emailNotificationService;
+    }
 
     public BookDto create(BookCreateDto dto) {
         Author author = authorService.findEntityById(dto.getAuthorId());
@@ -49,6 +66,8 @@ public class BookService {
                 .author(author)
                 .build();
         Book savedBook = bookRepository.save(book);
+
+        emailNotificationService.notifyBookCreated(book);
         return bookMapper.toDto(savedBook);
     }
 
