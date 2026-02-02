@@ -1,0 +1,50 @@
+[
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "year_published": 1949,
+    "genre": "Dystopian, Political Fiction"
+  },
+  {
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "year_published": 1813,
+    "genre": "Romance, Satire"
+  },
+  {
+    "title": "Romeo and Juliet",
+    "author": "William Shakespeare",
+    "year_published": 1597,
+    "genre": "Romance, Tragedy"
+  },
+  {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "year_published": 1925,
+    "genre": "Fiction, Romance"
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "year_published": 1960,
+    "genre": "Fiction, Drama"
+  },
+  {
+    "title": "The Catcher in the Rye",
+    "author": "J.D. Salinger",
+    "year_published": 1951,
+    "genre": "Fiction, Drama"
+  },
+  {
+    "title": "Moby Dick",
+    "author": "Herman Melville",
+    "year_published": 1851,
+    "genre": "Adventure, Fiction"
+  },
+  {
+    "title": "War and Peace",
+    "author": "Leo Tolstoy",
+    "year_published": 1869,
+    "genre": "Historical, Romance"
+  }
+]

@@ -1,0 +1,596 @@
+{
+  "info": {
+    "_postman_id": "book-author-api-collection",
+    "name": "Book & Author API - Complete Testing",
+    "description": "Full collection for testing Book and Author REST APIs with CRUD operations, validation, and relationship management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "AUTHOR - CRUD Operations",
+      "item": [
+        {
+          "name": "Create Author",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Leo Tolstoy\",\n  \"country\": \"Russia\",\n  \"birthYear\": 1828\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "Create new author\nCopy the returned ID for next requests"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Authors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "Get list of all authors"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Author by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "1"]
+            },
+            "description": "Get author by ID (replace 1 with actual ID)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Author",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Leo Tolstoy Updated\",\n  \"country\": \"Russia\",\n  \"birthYear\": 1828\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "1"]
+            },
+            "description": "Update author (replace 1 with actual ID)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Author",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "1"]
+            },
+            "description": "Delete author (replace 1 with actual ID)\n⚠️ Will fail if author has books - delete books first!"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "BOOK - CRUD Operations",
+      "item": [
+        {
+          "name": "Create Book",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"War and Peace\",\n  \"authorId\": 1,\n  \"yearPublished\": 1869,\n  \"genres\": [\"Fiction\", \"Historical\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book"]
+            },
+            "description": "Create new book\n⚠️ Replace authorId with actual author ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Books (with filters)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"page\": 0,\n  \"size\": 10,\n  \"sortBy\": \"id\",\n  \"sortOrder\": \"DESC\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book/_list",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "_list"]
+            },
+            "description": "Get all books with pagination and sorting"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/book/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "1"]
+            },
+            "description": "Get book by ID (replace 1 with actual ID)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"War and Peace (Updated Edition)\",\n  \"authorId\": 1,\n  \"yearPublished\": 1869,\n  \"genres\": [\"Fiction\", \"Historical\", \"Classic\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "1"]
+            },
+            "description": "Update book (replace 1 with actual ID)"
+          },
+          "response": []
+        },
+        {
+          "name": "5Delete Book",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/book/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "1"]
+            },
+            "description": "Delete book (replace 1 with actual ID)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "VALIDATION & ERROR TESTS",
+      "item": [
+        {
+          "name": "Create Author - Duplicate Name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Leo Tolstoy\",\n  \"country\": \"Russia\",\n  \"birthYear\": 1828\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "Should return 400 Bad Request\n(If author already exists)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Author - Empty Name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"country\": \"Russia\",\n  \"birthYear\": 1828\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "Should return 400 Bad Request\n(Empty name validation)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Create Author - Future Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Future Author\",\n  \"country\": \"Russia\",\n  \"birthYear\": 2050\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "⚠️ Should return 400 Bad Request\n(Birth year cannot be in future)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Create Book - Invalid Author ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Some Book\",\n  \"authorId\": 99999,\n  \"yearPublished\": 2020,\n  \"genres\": [\"Fiction\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book"]
+            },
+            "description": "⚠️ Should return 400 Bad Request\n(Author not found)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Create Book - Missing Title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authorId\": 1,\n  \"yearPublished\": 2020,\n  \"genres\": [\"Fiction\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book"]
+            },
+            "description": "⚠️ Should return 400 Bad Request\n(Title is required)"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Get Non-existent Author",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author/99999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "99999"]
+            },
+            "description": "⚠️ Should return 404 Not Found"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Get Non-existent Book",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/book/99999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "99999"]
+            },
+            "description": "⚠️ Should return 404 Not Found"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔗 RELATIONSHIP TESTS",
+      "item": [
+        {
+          "name": "Test: Author with Books",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Author\",\n  \"country\": \"Ukraine\",\n  \"birthYear\": 1950\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/author",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author"]
+            },
+            "description": "Step 1: Create author\nCopy ID for next requests"
+          },
+          "response": []
+        },
+        {
+          "name": "Test: Add Books to Author",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Book 1\",\n  \"authorId\": 1,\n  \"yearPublished\": 2020,\n  \"genres\": [\"Fiction\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book"]
+            },
+            "description": "Step 2: Create book for author\nCopy book ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Test: Delete Book Keeps Author",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/book/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "1"]
+            },
+            "description": "Step 3: Delete book\nAuthor should still exist!"
+          },
+          "response": []
+        },
+        {
+          "name": "Test: Verify Author Still Exists",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "1"]
+            },
+            "description": "✅ Author should still exist!"
+          },
+          "response": []
+        },
+        {
+          "name": "Test: Delete Author",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/author/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "author", "1"]
+            },
+            "description": "Step 4: Delete author\n✅ Should work because no books exist"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📤 FILE UPLOAD & EXPORT",
+      "item": [
+        {
+          "name": "Upload JSON Books File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "upload"]
+            },
+            "description": "Upload JSON file with books\nFile format:\n[\n  {\n    \"title\": \"Book Title\",\n    \"year_published\": 2020,\n    \"genre\": [\"Fiction\"],\n    \"author\": \"Author Name\"\n  }\n]"
+          },
+          "response": []
+        },
+        {
+          "name": "Export Books to CSV",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"page\": 0,\n  \"size\": 100,\n  \"sortBy\": \"id\",\n  \"sortOrder\": \"DESC\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/book/_report",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "book", "_report"]
+            },
+            "description": "📊 Export books to CSV file"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
