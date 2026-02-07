@@ -8,7 +8,8 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
   GKE_LOCATION: ${{ secrets.GKE_LOCATION }}
-  REGISTRY: gcr.io
+  REGISTRY: europe-central2-docker.pkg.dev
+  REPO_NAME: books-repo
 
 jobs:
   build-and-deploy:
@@ -26,23 +27,23 @@ jobs:
           export_default_credentials: true
 
       - name: Configure Docker auth for GCR
-        run: gcloud auth configure-docker gcr.io --quiet
+        run: gcloud auth configure-docker $REGISTRY --quiet
 
       - name: Build and push frontend image
         run: |
-          IMAGE_TAG="$REGISTRY/$PROJECT_ID/frontend:${{ github.sha }}"
+          IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/frontend:${{ github.sha }}"
           docker build -t "$IMAGE_TAG" ./frontend
           docker push "$IMAGE_TAG"
 
       - name: Build and push gateway image
         run: |
-          IMAGE_TAG="$REGISTRY/$PROJECT_ID/gateway:${{ github.sha }}"
+          IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/gateway:${{ github.sha }}"
           docker build -t "$IMAGE_TAG" ./gateway
           docker push "$IMAGE_TAG"
 
       - name: Build and push books-service image
         run: |
-          IMAGE_TAG="$REGISTRY/$PROJECT_ID/books-service:${{ github.sha }}"
+          IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/books-service:${{ github.sha }}"
           docker build -t "$IMAGE_TAG" ./books-service
           docker push "$IMAGE_TAG"
 
@@ -52,9 +53,9 @@ jobs:
 
       - name: Update deployments in GKE
         run: |
-          FRONTEND_IMAGE="$REGISTRY/$PROJECT_ID/frontend:${{ github.sha }}"
-          GATEWAY_IMAGE="$REGISTRY/$PROJECT_ID/gateway:${{ github.sha }}"
-          BOOKS_IMAGE="$REGISTRY/$PROJECT_ID/books-service:${{ github.sha }}"
+          FRONTEND_IMAGE="$REGISTRY/$PROJECT_ID/$REPO_NAME/frontend:${{ github.sha }}"
+          GATEWAY_IMAGE="$REGISTRY/$PROJECT_ID/$REPO_NAME/gateway:${{ github.sha }}"
+          BOOKS_IMAGE="$REGISTRY/$PROJECT_ID/$REPO_NAME/books-service:${{ github.sha }}"
 
           kubectl -n books set image deployment/frontend frontend="$FRONTEND_IMAGE"
           kubectl -n books set image deployment/gateway gateway="$GATEWAY_IMAGE"
