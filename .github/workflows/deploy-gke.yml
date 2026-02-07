@@ -35,19 +35,19 @@ jobs:
       - name: Build and push frontend image
         run: |
           IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/frontend:${{ github.sha }}"
-          docker build -t "$IMAGE_TAG" ./frontend
+          docker build -t "$IMAGE_TAG" -f ./frontend/Dockerfile ./frontend
           docker push "$IMAGE_TAG"
 
       - name: Build and push gateway image
         run: |
           IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/gateway:${{ github.sha }}"
-          docker build -t "$IMAGE_TAG" ./gateway
+          docker build -t "$IMAGE_TAG" -f ./gateway/Dockerfile ./gateway
           docker push "$IMAGE_TAG"
 
       - name: Build and push books-service image
         run: |
           IMAGE_TAG="$REGISTRY/$PROJECT_ID/$REPO_NAME/books-service:${{ github.sha }}"
-          docker build -t "$IMAGE_TAG" ./books-service
+          docker build -t "$IMAGE_TAG" -f ./books-service/Dockerfile ./books-service
           docker push "$IMAGE_TAG"
 
       - name: Get GKE credentials
