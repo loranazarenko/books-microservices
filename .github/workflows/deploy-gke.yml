@@ -35,6 +35,7 @@ jobs:
             chmod +x gke-gcloud-auth-plugin_linux_amd64
             mkdir -p ~/.config/gcloud/
             mv gke-gcloud-auth-plugin_linux_amd64 ~/.config/gcloud/
+            export PATH="$HOME/.config/gcloud:$PATH"
             echo 'export PATH="$HOME/.config/gcloud:$PATH"' >> $GITHUB_ENV
 
       - name: Configure Docker auth for GCR
