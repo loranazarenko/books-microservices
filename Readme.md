@@ -2,6 +2,13 @@
 
 Books management application built as a microservices system with Google OAuth2 authentication, API gateway, and deployment to Google Kubernetes Engine (GKE).
 
+## Links
+
+- Cloud URL: http://books-service.strangled.net/
+- GitHub repository: https://github.com/loranazarenko/books-microservices
+ 
+Any user with a Google account can sign in via the click "Register", then"Enter with Google" button on the frontend.
+
 ## Architecture
 
 - `books-service` – Java Spring Boot REST API for books and authors (PostgreSQL, Liquibase).
@@ -89,4 +96,4 @@ Required repository secrets:
     - `npm install`
     - `npm start`
 5. Configure Google OAuth redirect URI for `http://localhost/login/oauth2/code/google` for local testing.
-6. Open `http://localhost:3000/`, click **Login** to authenticate via Google, then use the UI to manage books.
+6. Open `http://localhost/`, click **Register**, then **Enter with Google** to authenticate via Google, then use the UI to manage books.
