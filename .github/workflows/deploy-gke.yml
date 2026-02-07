@@ -30,13 +30,9 @@ jobs:
             project_id: ${{ env.PROJECT_ID }}
 
       - name: Install gke-gcloud-auth-plugin
+            - name: Install gke-gcloud-auth-plugin
         run: |
-            curl -LO https://github.com/googlecloudplatform/gke-gcloud-auth-plugin/releases/latest/download/gke-gcloud-auth-plugin_linux_amd64
-            chmod +x gke-gcloud-auth-plugin_linux_amd64
-            mkdir -p ~/.config/gcloud/
-            mv gke-gcloud-auth-plugin_linux_amd64 ~/.config/gcloud/
-            export PATH="$HOME/.config/gcloud:$PATH"
-            echo 'export PATH="$HOME/.config/gcloud:$PATH"' >> $GITHUB_ENV
+             gcloud components install gke-gcloud-auth-plugin --quiet
 
       - name: Configure Docker auth for GCR
         run: gcloud auth configure-docker $REGISTRY --quiet
