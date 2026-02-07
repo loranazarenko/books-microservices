@@ -26,7 +26,7 @@ function BookDetail() {
     const [formData, setFormData] = useState(null);
     const [validationErrors, setValidationErrors] = useState({});
     const [saveNotification, setSaveNotification] = useState(null);
-    const isNew = id === 'new';
+    const isNew = !id || id === 'new';
     const [formError, setFormError] = useState(null);
 
     useEffect(() => {

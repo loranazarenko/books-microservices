@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: google-oauth
+  namespace: books
+type: Opaque
+stringData:
+  client-id: "455274106571-829g8c8q3j6fu80387n1n62aftasdqqc.apps.googleusercontent.com"
+  client-secret: "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"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: books
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: gcr.io/books-service-485914/gateway:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+#            - name: BOOKS_SERVICE_URL
+#              value: http://books-service.books.svc.cluster.local:8081
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: google-oauth
+                  key: client-id
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: google-oauth
+                  key: client-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: books
+spec:
+  selector:
+    app: gateway
+  ports:
+    - port: 8080
+      targetPort: 8080

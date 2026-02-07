@@ -8,6 +8,7 @@ import useLocationSearch from 'misc/hooks/useLocationSearch';
 
 import PageContainer from './components/PageContainer';
 
+
 const Login = (props) => {
   const locationSearch = useLocationSearch();
   const user = useSelector(({ user }) => user);

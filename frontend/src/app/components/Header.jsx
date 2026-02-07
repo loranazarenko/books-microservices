@@ -241,6 +241,25 @@ function Header({
                   </strong>
                 </Typography>
               )}
+
+                <Link
+                    to={{
+                        pathname: '/books',  // или pagesURLs.books
+                    }}
+                >
+                    <Button
+                        colorVariant="header"
+                        variant="text"
+                    >
+                        <Typography
+                            color="inherit"
+                            variant="subtitle"
+                        >
+                            <strong>Books</strong>
+                        </Typography>
+                    </Button>
+                </Link>
+
             </>
           ))}
         </div>

@@ -29,8 +29,6 @@ import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
 import BooksList from '../../pageProviders/BooksList';
 import BookDetail from '../../pageProviders/BookDetail'
 
-import ProfileFetcher from '../../components/ProfileFetcher';
-
 function App() {
     const dispatch = useDispatch();
     const [state, setState] = useState({
@@ -38,12 +36,8 @@ function App() {
     });
 
     const {
-        errors,
-        isFailedSignIn,
-        isFailedSignUp,
-        isFetchingSignIn,
-        isFetchingSignUp,
         isFetchingUser,
+        isAuthorized,
     } = useSelector(({user}) => user);
 
     useEffect(() => {
@@ -51,85 +45,60 @@ function App() {
             onSignOut: () => dispatch(actionsUser.fetchSignOut()),
         });
         dispatch(actionsUser.fetchUser());
-        setState({
-            ...state,
+        setState((prev) => ({
+            ...prev,
             componentDidMount: true,
-        });
-    }, []);
+        }));
+    }, [dispatch]);
+
+    if (!state.componentDidMount || isFetchingUser) {
+        return (
+            <ThemeProvider>
+                <BrowserRouter>
+                    <IntlProvider>
+                        <Loading/>
+                    </IntlProvider>
+                </BrowserRouter>
+            </ThemeProvider>
+        );
+    }
 
     return (
-        <ProfileFetcher>
-            <ThemeProvider>
+        <ThemeProvider>
+            <BrowserRouter>
                 <IntlProvider>
+                    <SearchParamsConfigurator/>
                     <UserProvider>
-                        <BrowserRouter>
-                            <SearchParamsConfigurator/>
-                            {state.componentDidMount && (
-                                <AuthoritiesProvider>
-                                    {isFetchingUser && <Loading/>}
-                                    {!isFetchingUser && (
-                                        <PageContainer>
-                                            <Header/>
+                        <AuthoritiesProvider>
+                            {isAuthorized ? (
+                                <>
+                                    <Header/>
+                                    <PageContainer>
+                                        {isAuthorized ? (
+                                        <Routes>
+                                            <Route path={pageURLs[pages.defaultPage]} element={<BooksList />}/>
+                                            <Route path="/" element={<BooksList />} />
+                                            <Route path="/books" element={<BooksList />} />
+                                            <Route path="/books/new" element={<BookDetail />} />
+                                            <Route path="/books/:id" element={<BookDetail />} />
+                                            <Route path={pageURLs.secret} element={<SecretPage/>}/>
+                                            <Route path="*" element={<MissedPage/>}/>
+                                        </Routes>
+                                        ) : (
                                             <Routes>
-                                                <Route
-                                                    element={<DefaultPage/>}
-                                                    path={`${pageURLs[pages.defaultPage]}`}
-                                                />
-                                                <Route
-                                                    element={<SecretPage/>}
-                                                    path={`${pageURLs[pages.secretPage]}`}
-                                                />
-                                                <Route
-                                                    element={
-                                                        <LoginPage
-                                                            errors={errors}
-                                                            isFailedSignIn={isFailedSignIn}
-                                                            isFailedSignUp={isFailedSignUp}
-                                                            isFetchingSignIn={isFetchingSignIn}
-                                                            isFetchingSignUp={isFetchingSignUp}
-                                                            onSignIn={({email, login, password}) =>
-                                                                dispatch(
-                                                                    actionsUser.fetchSignIn({
-                                                                        email,
-                                                                        login,
-                                                                        password,
-                                                                    })
-                                                                )
-                                                            }
-                                                            onSignUp={({
-                                                                           email,
-                                                                           firstName,
-                                                                           lastName,
-                                                                           login,
-                                                                           password,
-                                                                       }) =>
-                                                                dispatch(
-                                                                    actionsUser.fetchSignUp({
-                                                                        email,
-                                                                        firstName,
-                                                                        lastName,
-                                                                        login,
-                                                                        password,
-                                                                    })
-                                                                )
-                                                            }
-                                                        />
-                                                    }
-                                                    path={`${pageURLs[pages.login]}`}
-                                                />
-                                                <Route element={<BooksList/>} path="/books"/>
-                                                <Route element={<BookDetail/>} path="/books/:id"/>
-                                                <Route element={<MissedPage/>} path="*"/>
+                                                <Route path="*" element={<LoginPage />} />
                                             </Routes>
-                                        </PageContainer>
-                                    )}
-                                </AuthoritiesProvider>
+                                        )}
+                                    </PageContainer>
+                                </>
+                            ) : (
+                                <LoginPage/>
                             )}
-                        </BrowserRouter>
+                        </AuthoritiesProvider>
                     </UserProvider>
                 </IntlProvider>
-            </ThemeProvider>
-        </ProfileFetcher>
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }
 

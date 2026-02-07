@@ -120,18 +120,30 @@ function Login({
     return errors;
   };
 
-  useEffect(() => {
-    const errorCodeValues = Object.values(errorCodes);
-    const messages = errors.map(error => errorCodeValues.includes(error.code)
-      ? formatMessage({ id: `error.${error.code}` })
-      : error.description);
-    setState({
-      ...state,
-      externalErrors: messages,
-    })
-  }, [errors]);
+    useEffect(() => {
+        if (!errors || !Array.isArray(errors)) {
+            setState(prev => ({
+                ...prev,
+                externalErrors: [],
+            }));
+            return;
+        }
 
-  useEffect(() => {
+        const errorCodeValues = Object.values(errorCodes);
+        const messages = errors.map((error) =>
+            errorCodeValues.includes(error.code)
+                ? formatMessage({ id: `error.${error.code}` })
+                : error.description
+        );
+
+        setState(prev => ({
+            ...prev,
+            externalErrors: messages || [],
+        }));
+    }, [errors, formatMessage]);
+
+
+    useEffect(() => {
     if (state.isSignUpDialogOpened && !isFetchingSignUp && !isFailedSignUp) {
       if (isAutoSignInAfterSignUp) {
         onSignIn({
@@ -181,7 +193,7 @@ function Login({
           })}
           value={state.password}
         />
-        {isFailedSignIn && state.externalErrors.map(errorMessage => (
+        {isFailedSignIn && (state.externalErrors || []).map((errorMessage) =>  (
           <Typography color="error">
             {errorMessage}
           </Typography>
@@ -225,7 +237,7 @@ function Login({
         open={state.isSignUpDialogOpened}
       >
         <Card>
-          {isFailedSignUp && !!state.externalErrors.length && (
+          {isFailedSignUp && !!(state.externalErrors || []).length && (
             <Card variant="error">
               <CardTitle>
                 {state.externalErrors.map(errorMessage => (
@@ -405,6 +417,14 @@ function Login({
                   {formatMessage({ id: 'btn.signUp.apply' })}
                 </strong>
               </Typography>
+            </Button>
+            <Button
+                variant="primary"
+                onClick={() => {
+                    window.location.href = '/oauth2/authorization/google';
+                }}
+              >
+                Enter with Google
             </Button>
           </CardActions>
         </Card>

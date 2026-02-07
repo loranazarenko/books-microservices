@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
-@CrossOrigin({"http://localhost:3050", "http://localhost:3001"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor

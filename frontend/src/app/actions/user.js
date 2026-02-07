@@ -177,31 +177,71 @@ const fetchSignUp = ({
     .catch((errors) => dispatch(errorSignUp(errors)))
 };
 
+// for /profile
+const RECEIVE_PROFILE = 'RECEIVE_PROFILE';
+const REQUEST_PROFILE = 'REQUEST_PROFILE';
+const ERROR_PROFILE = 'ERROR_PROFILE';
+
+const receiveProfile = (profile) => ({
+    payload: profile,
+    type: RECEIVE_PROFILE,
+});
+
+const requestProfile = () => ({
+    type: REQUEST_PROFILE,
+});
+
+const errorProfile = (error) => ({
+    payload: error,
+    type: ERROR_PROFILE,
+});
+
+const fetchProfile = () => (dispatch) => {
+    dispatch(requestProfile());
+    return axios.get('/profile')
+        .then((response) => {
+            dispatch(receiveProfile(response.data));
+            return response.data;
+        })
+        .catch((error) => {
+            if (error.response?.status === 401) {
+                dispatch(fetchSignOut());
+                return null;
+            }
+            dispatch(errorProfile(error.response?.data?.message || 'Profile fetch failed'));
+            throw error;
+        });
+};
+
 const fetchUser = () => (dispatch) => {
-  if (!storage.getItem(keys.TOKEN)) {
-    return null;
-  }
-  dispatch(requestUser());
-  return getUser()
-    // TODO Mocked '.catch()' section
-    .catch((err) => {
-      const user = storage.getItem('USER');
-      if (user) {
-        const parsedUser = JSON.parse(user);
-        return parsedUser;
-      }
-      return Promise.reject(err);
-    })
-    .then(user => dispatch(receiveUser(user)))
-    .catch(() => dispatch(fetchSignOut()));
+    if (!storage.getItem(keys.TOKEN)) {
+        dispatch(requestUser());
+        return fetchProfile()(dispatch)
+            .then(profile => {
+                if (profile && profile.authenticated) {
+                    dispatch(receiveUser(profile));
+                }
+            })
+            .catch(() => dispatch(fetchSignOut()));
+    }
+
+    dispatch(requestUser());
+    return fetchProfile(dispatch)
+        .then(profile => {
+            if (profile && profile.authenticated) {
+                dispatch(receiveUser(profile));
+            }
+        })
+        .catch(() => dispatch(fetchSignOut()));
 };
 
 const exportFunctions = {
-  fetchRefreshToken,
-  fetchSignIn,
-  fetchSignOut,
-  fetchSignUp,
-  fetchUser,
+    fetchProfile,
+    fetchRefreshToken,
+    fetchSignIn,
+    fetchSignOut,
+    fetchSignUp,
+    fetchUser,
 };
 
 export default exportFunctions;
